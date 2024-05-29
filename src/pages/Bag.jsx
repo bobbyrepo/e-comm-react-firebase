@@ -9,7 +9,7 @@ function Bag() {
     const { cartItems } = useSelector(cart)
 
     return (
-        <div>
+        <div className='py-10'>
             <h1 className='text-3xl font-semibold'>My Bag</h1>
             <div className="row mt-2">
                 <div className="col-8">

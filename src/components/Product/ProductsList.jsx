@@ -29,14 +29,8 @@ function ProductsList() {
         fetchProducts()
     }, [])
 
-    const getTitle = (category) => {
-        return category === null ? "All" : category.replace(/\b\w/g, char => char.toUpperCase());
-    };
-
-
     return (
         <div>
-            <h1 className='text-xl font-semibold mb-3'>{getTitle(selectedCategory)}</h1>
             <div className="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-2">
                 {
                     (

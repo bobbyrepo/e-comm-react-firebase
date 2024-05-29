@@ -12,7 +12,7 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
-        <div className="w-[80%] mx-auto mt-16 mb-32">
+        <div className="w-[85%] mx-auto mt-20 mb-32">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Bag />} />

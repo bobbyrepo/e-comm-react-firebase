@@ -12,17 +12,24 @@ function ProductCard({ item }) {
 
     return (
         <div className='mb-3'>
-            <div className='py-2 px-3 hover:outline rounded outline-stone-100 h-full'>
+            <div className='w-full py-2 px-3 outline rounded outline-stone-100 h-full hover:scale-[101%] duration-150'>
                 <Link to={`/product/${item.id}`}>
                     <img src={item.image} className='mx-auto h-[200px] object-contain' alt="" />
-                    <div className="">
+                    <div className="mt-4 grid gap-1 text-neutral-800">
                         <h1 className='font-semibold line-clamp-1'>{item.title} </h1>
-                        <h2 className=''>{item.category} </h2>
-                        <h2 className=''>rating : {item.rating.rate} </h2>
-                        <h2 className=''> price : <span>{item.price}.00 </span>rs</h2>
+                        <h2 className='line-clamp-2 text-neutral-600'>{item.description} </h2>
+                        <h2 className='text-neutral-600'>rating : {item.rating.rate} </h2>
+                        <h2 className='font-semibold'> {item.price}.00<span className='font-normal' > rs</span></h2>
                     </div>
                 </Link>
-                <button onClick={() => addToCart(item)} className='w-fit mx-auto px-3 py-1 rounded border hover:bg-slate-300'>Add To Cart</button>
+                <div className="flex justify-center">
+                    <button
+                        onClick={() => addToCart(item)}
+                        className='mt-2 w-full mb-1 px-3 py-1 text-md rounded-full outline outline-1 outline-rose-500 text-rose-500 hover:text-white hover:bg-rose-500'>
+                        Add To Cart
+                    </button>
+                </div>
+
             </div>
         </div>
     )
