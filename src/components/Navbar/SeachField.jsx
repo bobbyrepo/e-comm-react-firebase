@@ -4,7 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 
 
 
-function SeachField({ handleInputChange, setShowSearch }) {
+function SeachField({ search, handleInputChange, setShowSearch }) {
 
 
     return (
@@ -12,7 +12,7 @@ function SeachField({ handleInputChange, setShowSearch }) {
             <div className="text-2xl py-2 px-3 text-neutral-400">
                 <GoSearch />
             </div>
-            <input onChange={handleInputChange} type="text" className='w-[400px] h-10 text-lg bg-neutral-600 outline-none' />
+            <input onChange={handleInputChange} value={search} type="text" className='w-[400px] h-10 text-lg bg-neutral-600 outline-none' />
             <div
                 onClick={() => setShowSearch(false)}
                 className="text-2xl py-2 px-3 text-neutral-400">

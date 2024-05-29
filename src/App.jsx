@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Bag from './pages/Bag'
 import Navbar from './components/Navbar/Navbar'
+import ProductDetails from './pages/ProductDetails'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Bag />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
           </Routes>
         </div>
       </BrowserRouter>

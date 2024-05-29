@@ -56,8 +56,8 @@ function Navbar() {
                     </button>
                     <div className="flex gap-4">
                         <div className="relative">
-                            <SeachField handleInputChange={handleInputChange} setShowSearch={setShowSearch} />
-                            {showSearch && <SearchCardsList searchList={searchList} />}
+                            <SeachField search={search} handleInputChange={handleInputChange} setShowSearch={setShowSearch} />
+                            {showSearch && <SearchCardsList searchList={searchList} setSearch={setSearch} />}
                         </div>
                         <button
                             onClick={() => navigate("/cart")}
