@@ -6,6 +6,8 @@ import { products } from '../../utils/redux/slice/productsSlice';
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import SeachField from './SeachField';
 import SearchCardsList from './SearchCardsList';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 function Navbar() {
     const navigate = useNavigate()
@@ -15,6 +17,9 @@ function Navbar() {
     const [showSearch, setShowSearch] = useState(false)
     const [search, setSearch] = useState("")
     const [searchList, setSearchList] = useState([])
+
+    const [showSignIn, setShowSignIn] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
 
     const handleInputChange = (e) => {
         setSearch(e.target.value)
@@ -32,6 +37,17 @@ function Navbar() {
     }
 
 
+
+    const handleSignInShow = () => {
+        if (showSignIn || showSignUp) {
+            setShowSignIn(false)
+            setShowSignUp(false)
+        }
+        else {
+            setShowSignIn(true)
+        }
+    }
+
     useEffect(() => {
         if (search.length > 0) setShowSearch(true)
         else setShowSearch(false)
@@ -45,7 +61,7 @@ function Navbar() {
     }, [search])
 
     return (
-        <div className='w-full  bg-zinc-800  h-[70px] text-white'>
+        <div className='fixed top-0 z-[100] w-full  bg-zinc-800  h-[70px] text-white'>
             <div className='flex flex-col item justify-between w-[80%] mx-auto h-full'>
                 <div className="flex my-auto justify-between">
                     <button
@@ -61,16 +77,24 @@ function Navbar() {
                         </div>
                         <button
                             onClick={() => navigate("/cart")}
-                            className='relative text-2xl'>
+                            className='relative text-2xl hover:scale-[105%]'>
                             <HiOutlineShoppingBag />
                             <h3 className='absolute top-0 -right-2 text-sm px-[6px] rounded-full bg-red-600'>
                                 {cartItems.length}
                             </h3>
                         </button>
-
+                        <button
+                            className='hover:scale-[103%]'
+                            onClick={handleSignInShow}
+                        >
+                            Sign In / Up
+                        </button>
                     </div>
                 </div>
             </div>
+            {showSignIn && <SignIn setShowSignIn={setShowSignIn} setShowSignUp={setShowSignUp} />}
+            {showSignUp && <SignUp setShowSignIn={setShowSignIn} setShowSignUp={setShowSignUp} />}
+
         </div>
     )
 }
