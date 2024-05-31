@@ -1,13 +1,25 @@
 import React from 'react'
 import { addItem } from '../../utils/redux/slice/cartSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { authData } from '../../utils/redux/slice/authSlice'
+import { toast } from 'react-hot-toast'
 
 function ProductCard({ item }) {
     const dispatch = useDispatch()
+    const { isAuthenticated } = useSelector(authData)
 
-    const addToCart = () => {
-        dispatch(addItem(item))
+    const addToCart = (item) => {
+        if (!isAuthenticated) {
+            toast.error("You must login first");
+            return
+        }
+        try {
+            dispatch(addItem(item))
+            toast.success("Added to Cart");
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
 
     return (

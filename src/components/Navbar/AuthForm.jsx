@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import InputField from './InputField';
 import PasswordInput from './PasswordInput';
 import FormHeader from './FormHeader';
-import { authData, addAuth } from '../../utils/redux/slice/authSlice';
+import { addAuth } from '../../utils/redux/slice/authSlice';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config.js/firebase';
+import { hideModals } from '../../utils/redux/slice/modalSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 
 const AuthForm = ({ mode, toggleMode, handleClose }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -42,38 +43,39 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
 
     const loginAccount = async () => {
         try {
-            console.log("before lodin try")
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("after lodin try")
             const user = userCredential.user;
-            console.log("user", user)
             dispatch(addAuth({
                 user: {
                     email: user.email,
                     accessToken: user.accessToken,
                     uid: user.uid,
                 },
-            }))
-            toast.success("Login Successful")
+            }));
+            toast(`You made it ${user.email.split("@")[0]}!`, {
+                icon: '🥳 ',
+            });
+            dispatch(hideModals());
+        } catch (error) {
+            console.error('Error during login:', error);
+            toast.error("Invalid Credentials");
         }
-        catch (error) {
-            toast.error("Invalid Credentials")
-        }
-    }
+    };
 
     const createAccount = async () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            await loginAccount()
-            // toast.success('Account created successfully.')
+            await loginAccount();
+            // toast.success('Account created successfully.');
         } catch (error) {
-            if (error.customData._tokenResponse.error.code == 400) {
-                toast.error("Email Alreday Exists")
+            console.error('Error during account creation:', error);
+            if (error.customData && error.customData._tokenResponse && error.customData._tokenResponse.error && error.customData._tokenResponse.error.code === 400) {
+                toast.error("Email Already Exists");
             } else {
-                toast.error("Account Creation Error")
+                toast.error("Account Creation Error");
             }
         }
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -84,15 +86,10 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
             setErrors({ email: emailError, password: passwordError, confirmPassword: confirmPasswordError });
         } else {
             setErrors({ email: '', password: '', confirmPassword: '' });
-            // Proceed with form submission
-            // console.log('Form submitted:', { email, password, confirmPassword });
-            if (mode == "signup") {
-                // console.log("MODE : signup")
-                createAccount()
-            }
-            else {
-                // console.log("MODE : signin")
-                loginAccount()
+            if (mode === "signup") {
+                createAccount();
+            } else {
+                loginAccount();
             }
         }
     };
@@ -100,13 +97,13 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
     return (
         <div className="relative h-[100vh] w-full">
             <div className="absolute top-0 left-0 h-full w-full bg-black opacity-50 backdrop-blur"></div>
-            <div className="absolute top-2 left-1/2 z-10 w-[500px] py-16 h-fit text-black text-center bg-white rounded-[30px] transform -translate-x-1/2">
+            <div className="absolute top-24 left-1/2 z-10 w-[500px] py-16 h-fit text-black text-center bg-white rounded-[30px] transform -translate-x-1/2">
                 <FormHeader
                     title={mode === 'signin' ? 'Welcome Back' : 'Welcome to'}
                     subtitle={mode === 'signin' ? 'SIGN IN' : 'SIGN UP'}
                     handleClose={handleClose}
                 />
-                <form onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit}>
                     <InputField
                         id="email"
                         label="Email"
@@ -146,7 +143,7 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
                     </button>
                     <div className="mt-1 leading-3">
                         <h1>{mode === 'signin' ? 'New to STOP SHOP?' : 'Already have an account?'}</h1>
-                        <button onClick={toggleMode} className="text-rose-400">
+                        <button type="button" onClick={toggleMode} className="text-rose-400">
                             {mode === 'signin' ? 'Create an account' : 'Sign In'}
                         </button>
                     </div>

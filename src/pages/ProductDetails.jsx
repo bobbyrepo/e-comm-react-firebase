@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { baseApi } from '../api/axiosInstance';
 import axios from 'axios';
 import { addItem } from '../utils/redux/slice/cartSlice';
+import { authData } from '../utils/redux/slice/authSlice';
+import { toast } from 'react-hot-toast';
 
 function ProductDetails() {
+    const { isAuthenticated } = useSelector(authData)
     const { id } = useParams();
     const dispatch = useDispatch()
     const [product, setProduct] = useState(null)
 
     const addToCart = (product) => {
-        dispatch(addItem(product))
+        if (!isAuthenticated) {
+            toast.error("You must login first");
+            return
+        }
+        try {
+            dispatch(addItem(product))
+            toast.success("Added to Cart");
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
+
 
     const fetchProductDetails = async (id) => {
         try {

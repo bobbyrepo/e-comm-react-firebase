@@ -6,20 +6,25 @@ import { products } from '../../utils/redux/slice/productsSlice';
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import SeachField from './SeachField';
 import SearchCardsList from './SearchCardsList';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
+import { toggleSignIn } from '../../utils/redux/slice/modalSlice';
+import { deleteAuth } from '../../utils/redux/slice/authSlice';
+import { authData } from '../../utils/redux/slice/authSlice';
+import { useDispatch } from 'react-redux';
+import { RxAvatar } from "react-icons/rx";
+import { signOut } from 'firebase/auth';
+import { auth } from '../../config.js/firebase';
+import { toast } from 'react-hot-toast';
 
 function Navbar() {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const { allProducts } = useSelector((products))
     const { cartItems } = useSelector(cart)
+    const { isAuthenticated, user } = useSelector(authData)
 
     const [showSearch, setShowSearch] = useState(false)
     const [search, setSearch] = useState("")
     const [searchList, setSearchList] = useState([])
-
-    const [showSignIn, setShowSignIn] = useState(false);
-    const [showSignUp, setShowSignUp] = useState(false);
 
     const handleInputChange = (e) => {
         setSearch(e.target.value)
@@ -36,16 +41,14 @@ function Navbar() {
         }
     }
 
-
-
-    const handleSignInShow = () => {
-        if (showSignIn || showSignUp) {
-            setShowSignIn(false)
-            setShowSignUp(false)
-        }
-        else {
-            setShowSignIn(true)
-        }
+    const handleLogout = async () => {
+        await signOut(auth);
+        dispatch(deleteAuth({
+            user: null
+        }))
+        toast('Come back soon!', {
+            icon: '👋 ',
+        });
     }
 
     useEffect(() => {
@@ -75,26 +78,40 @@ function Navbar() {
                             <SeachField search={search} handleInputChange={handleInputChange} setShowSearch={setShowSearch} />
                             {showSearch && <SearchCardsList searchList={searchList} setSearch={setSearch} />}
                         </div>
-                        <button
-                            onClick={() => navigate("/cart")}
-                            className='relative text-2xl hover:scale-[105%]'>
-                            <HiOutlineShoppingBag />
-                            <h3 className='absolute top-0 -right-2 text-sm px-[6px] rounded-full bg-red-600'>
-                                {cartItems.length}
-                            </h3>
-                        </button>
-                        <button
-                            className='hover:scale-[103%]'
-                            onClick={handleSignInShow}
-                        >
-                            Sign In / Up
-                        </button>
+                        {isAuthenticated ?
+                            <div className="flex gap-4 items-center">
+                                <button
+                                    onClick={() => navigate("/cart")}
+                                    className='relative text-2xl hover:scale-[105%]'>
+                                    <HiOutlineShoppingBag />
+                                    <h3 className='absolute top-0 -right-2 text-sm px-[6px] rounded-full bg-red-600'>
+                                        {cartItems.length}
+                                    </h3>
+                                </button>
+                                <div className="dropdown-center text-[26px] h-8 hover:scale-[105%]">
+                                    <button className="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <RxAvatar />
+                                    </button>
+                                    <u className="dropdown-menu no-underline py-0 overflow-hidden">
+                                        <div
+                                            className="w-full px-2 py-2">{user.email.split('@')[0]}</div>
+                                        <div
+                                            onClick={() => handleLogout()}
+                                            className="w-full px-2 py-2 hover:text-white hover:bg-neutral-600">Logout</div>
+                                    </u>
+                                </div>
+                            </div>
+                            :
+                            <button
+                                className='hover:scale-[103%]'
+                                onClick={() => dispatch(toggleSignIn())}
+                            >
+                                Sign In / Up
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
-            {showSignIn && <SignIn setShowSignIn={setShowSignIn} setShowSignUp={setShowSignUp} />}
-            {showSignUp && <SignUp setShowSignIn={setShowSignIn} setShowSignUp={setShowSignUp} />}
-
         </div>
     )
 }

@@ -8,9 +8,6 @@ import { categories } from '../utils/redux/slice/categoriesSlice'
 function Home() {
     const { selectedCategory } = useSelector(categories)
 
-    console.log(selectedCategory)
-
-
     const getTitle = (category) => {
         return category === null ? "All Products" : category.replace(/\b\w/g, char => char.toUpperCase());
     };
