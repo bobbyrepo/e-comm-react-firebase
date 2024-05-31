@@ -42,7 +42,7 @@ function Filter() {
                                 :
                                 <img src={uncheck} className='w-4' alt="" />
                         }
-                        <h2 className='text-lg font-'>{item.replace(/\b\w/g, char => char.toUpperCase())}</h2>
+                        <h2 className='text-md font-'>{item.replace(/\b\w/g, char => char.toUpperCase())}</h2>
                     </button>
                 ))}
             </div>

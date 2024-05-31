@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Bag from './pages/Bag'
 import Navbar from './components/Navbar/Navbar'
 import ProductDetails from './pages/ProductDetails'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
           </Routes>
         </div>
+        <Toaster />
       </BrowserRouter>
     </>
   )
