@@ -5,10 +5,6 @@
 
 Stop Shop is an e-commerce web application designed to provide users with a seamless shopping experience. It offers a wide range of products, allows users to add items to their cart, and facilitates the checkout process.
 
-## Introduction
-
-Stop Shop is an e-commerce web application designed to provide users with a seamless shopping experience. It offers a wide range of products, allows users to add items to their cart, and facilitates the checkout process. This documentation covers the development process, challenges faced, solutions implemented, deployment instructions, and access to the application.
-
 ## Features
 
 - Browse products from various categories.
