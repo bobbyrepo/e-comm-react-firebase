@@ -2,10 +2,18 @@ import React from 'react'
 import { cart } from '../../utils/redux/slice/cartSlice'
 import { useSelector } from 'react-redux'
 import BillFormat from '../../ui/BillFormat'
+import { showOrderModal } from '../../utils/redux/slice/orderModalSlice';
+import { useDispatch } from 'react-redux';
 
 
 function BagAmount() {
+    const dispatch = useDispatch()
+
     const { cartTotal } = useSelector(cart)
+
+    const handleCheckout = () => {
+        dispatch(showOrderModal())
+    }
 
     return (
         <div className='p-3 border border-slate-300 rounded'>
@@ -21,7 +29,9 @@ function BagAmount() {
                         <h1 className='font-medium text-2xl'>Total</h1>
                         <h1 className='text-xl'>{cartTotal}.00 rs</h1>
                     </div>
-                    <button className='px-5 h-12 text-white font-semibold rounded-full bg-rose-500'>Checkout</button>
+                    <button
+                        onClick={handleCheckout}
+                        className='px-5 h-12 text-white font-semibold rounded-full bg-rose-500'>Checkout</button>
                 </div>
             </div>
         </div>

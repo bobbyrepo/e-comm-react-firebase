@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import InputField from './InputField';
-import PasswordInput from './PasswordInput';
-import FormHeader from './FormHeader';
+import InputField from '../../ui/InputField';
+import PasswordInput from '../../ui/PasswordInput';
+import FormHeader from '../../ui/FormHeader';
 import { addAuth } from '../../utils/redux/slice/authSlice';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../config.js/firebase';

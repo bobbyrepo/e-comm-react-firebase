@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import { cart } from '../../utils/redux/slice/cartSlice';
 import { products } from '../../utils/redux/slice/productsSlice';
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import { RxAvatar } from "react-icons/rx";
+import { RiReceiptLine } from "react-icons/ri";
 import SeachField from './SeachField';
 import SearchCardsList from './SearchCardsList';
 import { toggleSignIn } from '../../utils/redux/slice/modalSlice';
 import { deleteAuth } from '../../utils/redux/slice/authSlice';
 import { authData } from '../../utils/redux/slice/authSlice';
 import { useDispatch } from 'react-redux';
-import { RxAvatar } from "react-icons/rx";
 import { signOut } from 'firebase/auth';
 import { auth } from '../../config.js/firebase';
 import { toast } from 'react-hot-toast';
@@ -80,6 +81,12 @@ function Navbar() {
                         </div>
                         {isAuthenticated ?
                             <div className="flex gap-4 items-center">
+                                <button
+                                    onClick={() => navigate("/order-history")}
+                                    className='relative text-2xl hover:scale-[105%] h-5 text-neutral-200'>
+                                    <RiReceiptLine />
+
+                                </button>
                                 <button
                                     onClick={() => navigate("/cart")}
                                     className='relative text-2xl hover:scale-[105%]'>
