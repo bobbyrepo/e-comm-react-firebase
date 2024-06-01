@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { hideOrderModal } from '../../utils/redux/slice/orderModalSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import InputField from '../../ui/InputField';
 import TextareaField from '../../ui/TextareaField';
+import { validateFirstName, validateLastName, validateAddress, validateContact, validatePostal } from '../../helpers/validation';
 import { MdClose } from 'react-icons/md';
+import { processingFee, discount } from '../../utils/constants';
+import { cart } from '../../utils/redux/slice/cartSlice';
+import { clearCart } from '../../utils/redux/slice/cartSlice';
+import { hideOrderForm } from '../../utils/redux/slice/orderFormSlice';
+import { addOrder } from '../../utils/redux/slice/orderSlice';
+import { authData } from '../../utils/redux/slice/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 function OrderForm() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const { cartTotal, cartItems } = useSelector(cart)
+    const { user } = useSelector(authData)
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [address, setAddress] = useState('');
@@ -15,53 +27,35 @@ function OrderForm() {
     const [errors, setErrors] = useState({ firstName: '', lastName: '', address: '', contact: '', postal: '' });
 
     const handleClose = () => {
-        dispatch(hideOrderModal());
-    };
-
-    const validateFirstName = () => {
-        if (!firstName) return 'First Name is required';
-        return '';
-    };
-
-    const validateLastName = () => {
-        if (!lastName) return 'Last Name is required';
-        return '';
-    };
-
-    const validateAddress = () => {
-        if (!address) return 'Address is required';
-        return '';
-    };
-
-    const validateContact = () => {
-        if (!contact) return 'Contact Number is required';
-        const contactRegex = /^[0-9]+$/;
-        if (!contactRegex.test(contact)) return 'Contact Number must be numeric';
-        if (contact.length < 10 || contact.length > 15) return 'Contact Number must be between 10 and 15 digits';
-        return '';
-    };
-
-    const validatePostal = () => {
-        if (!postal) return 'Postal Code is required';
-        const postalRegex = /^[0-9]+$/;
-        if (!postalRegex.test(postal)) return 'Postal Code must be numeric';
-        return '';
+        dispatch(hideOrderForm());
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const firstNameError = validateFirstName();
-        const lastNameError = validateLastName();
-        const addressError = validateAddress();
-        const contactError = validateContact();
-        const postalError = validatePostal();
+        const firstNameError = validateFirstName(firstName);
+        const lastNameError = validateLastName(lastName);
+        const addressError = validateAddress(address);
+        const contactError = validateContact(contact);
+        const postalError = validatePostal(postal);
 
         if (firstNameError || lastNameError || addressError || contactError || postalError) {
             setErrors({ firstName: firstNameError, lastName: lastNameError, address: addressError, contact: contactError, postal: postalError });
         } else {
             setErrors({ firstName: '', lastName: '', address: '', contact: '', postal: '' });
-            // Dispatch the form data or handle it as necessary
-            dispatch(hideOrderModal());
+            dispatch(addOrder({
+                orderedBy: user.email,
+                products: cartItems,
+                cartTotal,
+                processingFee,
+                discount,
+                payableAmmount: cartTotal + processingFee - discount,
+                shippedTo: { firstName, lastName, address, contact, postal }
+            }))
+            dispatch(hideOrderForm());
+            dispatch(clearCart());
+            navigate("/")
+            toast.success("Purchase successful 🙌")
+
         }
     };
 

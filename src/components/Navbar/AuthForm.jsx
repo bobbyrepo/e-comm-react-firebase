@@ -8,6 +8,7 @@ import { auth } from '../../config.js/firebase';
 import { hideModals } from '../../utils/redux/slice/modalSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
+import { validateEmail, validatePassword, validateConfirmPassword } from '../../helpers/validation';
 
 const AuthForm = ({ mode, toggleMode, handleClose }) => {
     const dispatch = useDispatch();
@@ -20,26 +21,6 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
 
     const toggleShowPassword = () => setShowPassword(!showPassword);
     const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
-
-    const validateEmail = () => {
-        if (!email) return 'Email is required';
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) return 'Invalid email address';
-        return '';
-    };
-
-    const validatePassword = () => {
-        if (!password) return 'Password is required';
-        if (password.length < 6) return 'Password must be at least 6 characters';
-        return '';
-    };
-
-    const validateConfirmPassword = () => {
-        if (!confirmPassword) return 'Password is required';
-        if (confirmPassword.length < 6) return 'Password must be at least 6 characters';
-        if (confirmPassword !== password) return 'Passwords do not match';
-        return '';
-    };
 
     const loginAccount = async () => {
         try {
@@ -79,9 +60,9 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const emailError = validateEmail();
-        const passwordError = validatePassword();
-        const confirmPasswordError = mode === 'signup' ? validateConfirmPassword() : '';
+        const emailError = validateEmail(email);
+        const passwordError = validatePassword(password);
+        const confirmPasswordError = mode === 'signup' ? validateConfirmPassword(confirmPassword) : '';
         if (emailError || passwordError || confirmPasswordError) {
             setErrors({ email: emailError, password: passwordError, confirmPassword: confirmPasswordError });
         } else {

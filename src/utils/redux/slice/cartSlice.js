@@ -65,10 +65,17 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
     },
+
+    clearCart: (state) => {
+      state.cartItems = [];
+      state.cartTotal = 0;
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
+    },
   },
 });
 
 export const cart = (state) => state.cart;
-export const { addItem, incrementItem, decrementItem, removeItem } =
+export const { addItem, incrementItem, decrementItem, removeItem, clearCart } =
   cartSlice.actions;
 export default cartSlice.reducer;

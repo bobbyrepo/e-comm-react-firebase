@@ -14,11 +14,7 @@ function BagCard({ item }) {
     const remove = (id) => { dispatch(removeItem(id)) }
 
     const handleMouseEnter = (index) => { setHover(index); };
-    const handleMouseLeave = (index) => { setHover(null); };
-
-    useEffect(() => {
-        console.log(hover)
-    }, [hover])
+    const handleMouseLeave = () => { setHover(null); };
 
     return (
         <div className={`row gap-6 p-3  border border-slate-300 rounded ${hover == item.id ? `scale-[101%]` : `scale-100`} duration-200`}>
