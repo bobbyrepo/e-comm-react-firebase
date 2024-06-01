@@ -72,7 +72,7 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
         e.preventDefault();
         const emailError = validateEmail(email);
         const passwordError = validatePassword(password);
-        const confirmPasswordError = mode === 'signup' ? validateConfirmPassword(confirmPassword) : '';
+        const confirmPasswordError = mode === 'signup' ? validateConfirmPassword(confirmPassword, password) : '';
         if (emailError || passwordError || confirmPasswordError) {
             setErrors({ email: emailError, password: passwordError, confirmPassword: confirmPasswordError });
         } else {
