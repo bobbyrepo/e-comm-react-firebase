@@ -5,6 +5,7 @@ import { categories } from '../../utils/redux/slice/categoriesSlice'
 import { baseApi } from '../../api/axiosInstance'
 import ProductCard from './ProductCard'
 import axios from 'axios'
+import ProductListSkeleton from '../skeleton/ProductListSkeleton'
 
 function ProductsList() {
     const dispatch = useDispatch()
@@ -37,6 +38,8 @@ function ProductsList() {
     useEffect(() => {
         fetchProducts()
     }, [])
+
+    if (allProducts.length == 0) return <ProductListSkeleton />
 
     return (
         <div>

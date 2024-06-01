@@ -5,6 +5,7 @@ import { addCategory, selectCategory } from '../../utils/redux/slice/categoriesS
 import { categories } from '../../utils/redux/slice/categoriesSlice'
 import check from "../../assets/check.png"
 import uncheck from "../../assets/uncheck.png"
+import FilterSkeleton from '../skeleton/FilterSkeleton'
 
 function Filter() {
     const dispatch = useDispatch()
@@ -29,6 +30,8 @@ function Filter() {
     useEffect(() => {
         getCategories()
     }, [])
+
+    if (allCategories.length == 0) return <FilterSkeleton />
 
     return (
         <div className='px-3 py-2 border-1 rounded-xl border-stale-300'>
