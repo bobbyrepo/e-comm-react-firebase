@@ -11,27 +11,38 @@ function ProductsList() {
     const { allProducts } = useSelector(products)
     const { selectedCategory } = useSelector(categories)
 
+    // Function to fetch products from the API
     const fetchProducts = async () => {
         try {
+            // Fetch products from the backend API
             const response = await baseApi("/products")
             const products = response.data
+
+            // Fetch currency conversion rates
             const conversionResponse = await axios.get(`https://api.frankfurter.app/latest?amount=1&from=usd&to=inr`)
             const unit = conversionResponse.data.rates.INR
-            const updatedProducts = products.map(item => ({ ...item, price: Math.round(unit * item.price) }));
+
+            // Convert product prices to INR
+            const updatedProducts = products.map(item => ({ ...item, price: Math.round(unit * item.price) }))
+
+            // Dispatch action to add products to the Redux store
             dispatch(addProduct(updatedProducts))
         }
-        catch {
-            err => console.log("error in fetching products", err)
+        catch (err) {
+            console.log("error in fetching products", err)
         }
     }
 
+    // Fetch products on component mount
     useEffect(() => {
         fetchProducts()
     }, [])
 
     return (
         <div>
+            {/* Render the products in a grid layout */}
             <div className="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-2">
+                {/* Map through products and render ProductCard component for each */}
                 {
                     (
                         selectedCategory == null

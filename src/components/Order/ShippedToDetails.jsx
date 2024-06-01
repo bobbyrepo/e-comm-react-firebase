@@ -3,14 +3,17 @@ import React from 'react';
 const ShippedToDetails = ({ shippedTo, orderedBy }) => {
     return (
         <div className="col p-2 bg-white">
+            {/* Table to display shipping details */}
             <table className="min-w-full bg-white">
                 <tbody>
+                    {/* Table row for the person who placed the order */}
                     <tr>
                         <th className="text-left font-semibold">OrderedBy:</th>
                         <th className="text-left font-semibold">{orderedBy}</th>
                     </tr>
                 </tbody>
                 <tbody>
+                    {/* Table rows for shipping details */}
                     <tr>
                         <td className="font-semibold">First Name:</td>
                         <td>{shippedTo.firstName}</td>

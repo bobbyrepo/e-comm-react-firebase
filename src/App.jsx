@@ -19,26 +19,31 @@ function App() {
   const { showSignIn, showSignUp } = useSelector(modal)
   const orderForm = useSelector(selectOrderForm)
 
-
   return (
     <>
       <BrowserRouter>
+        {/* Navbar component */}
         <Navbar />
+        {/* Modal components */}
         <div className="fixed right-0 left-0 top-0 z-[100]">
           {orderForm && <OrderForm />}
           {showSignIn && <SignIn />}
           {showSignUp && <SignUp />}
         </div>
+        {/* Main content area */}
         <div className="w-[85%] mx-auto mt-20 mb-32">
           <Routes>
+            {/* Public routes */}
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/cart" element={<Bag />} />
               <Route path="/order-history" element={<Orders />} />
             </Route>
           </Routes>
         </div>
+        {/* Toast notifications */}
         <Toaster />
       </BrowserRouter>
     </>

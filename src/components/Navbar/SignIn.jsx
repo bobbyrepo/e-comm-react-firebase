@@ -7,12 +7,15 @@ const SignIn = () => {
     const dispatch = useDispatch()
 
     return (
+        // Render the AuthForm component for sign-in mode
         <AuthForm
             mode="signin"
+            // Toggle between sign-in and sign-up modes
             toggleMode={() => {
                 dispatch(toggleSignIn())
                 dispatch(toggleSignUp())
             }}
+            // Handle closing of the modal
             handleClose={() => dispatch(hideModals())}
         />
     );

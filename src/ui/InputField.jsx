@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Component for form input text
 const InputField = ({ id, label, type, value, onChange, onBlur, error }) => (
     <div className="flex flex-col gap-1 items-start w-[320px] mx-auto">
         <label htmlFor={id} className="text-lg">{label}</label>

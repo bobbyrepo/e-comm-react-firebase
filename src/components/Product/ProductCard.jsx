@@ -9,15 +9,21 @@ function ProductCard({ item }) {
     const dispatch = useDispatch()
     const { isAuthenticated } = useSelector(authData)
 
+    // Function to add item to the cart
     const addToCart = (item) => {
+        // Check if the user is authenticated
         if (!isAuthenticated) {
+            // If not authenticated, display error toast and return
             toast.error("You must login first");
             return
         }
         try {
+            // Dispatch action to add item to cart
             dispatch(addItem(item))
+            // Display success toast after adding item to cart
             toast.success("Added to Cart");
         } catch (error) {
+            // Display error toast if there's an error adding item to cart
             toast.error(error.message);
         }
     }
@@ -25,6 +31,7 @@ function ProductCard({ item }) {
     return (
         <div className='mb-3'>
             <div className='w-full py-2 px-3 outline rounded outline-stone-100 h-full hover:scale-[101%] duration-150'>
+                {/* Link to the product details page */}
                 <Link to={`/product/${item.id}`}>
                     <img src={item.image} className='mx-auto h-[200px] object-contain' alt="" />
                     <div className="mt-4 grid gap-1 text-neutral-800">
@@ -34,6 +41,7 @@ function ProductCard({ item }) {
                         <h2 className='font-semibold'> {item.price}.00<span className='font-normal' > rs</span></h2>
                     </div>
                 </Link>
+                {/* Button to add item to cart */}
                 <div className="flex justify-center">
                     <button
                         onClick={() => addToCart(item)}
@@ -41,7 +49,6 @@ function ProductCard({ item }) {
                         Add To Cart
                     </button>
                 </div>
-
             </div>
         </div>
     )

@@ -26,22 +26,30 @@ function OrderForm() {
     const [postal, setPostal] = useState('');
     const [errors, setErrors] = useState({ firstName: '', lastName: '', address: '', contact: '', postal: '' });
 
+    // Close the order form
     const handleClose = () => {
         dispatch(hideOrderForm());
     };
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validate form fields
         const firstNameError = validateFirstName(firstName);
         const lastNameError = validateLastName(lastName);
         const addressError = validateAddress(address);
         const contactError = validateContact(contact);
         const postalError = validatePostal(postal);
 
+        // If there are validation errors, update the errors state
         if (firstNameError || lastNameError || addressError || contactError || postalError) {
             setErrors({ firstName: firstNameError, lastName: lastNameError, address: addressError, contact: contactError, postal: postalError });
         } else {
+            // If no errors, clear the errors state and proceed with order submission
             setErrors({ firstName: '', lastName: '', address: '', contact: '', postal: '' });
+
+            // Dispatch actions to add the order, hide the order form, and clear the cart
             dispatch(addOrder({
                 orderedBy: user.email,
                 products: cartItems,
@@ -53,18 +61,21 @@ function OrderForm() {
             }))
             dispatch(hideOrderForm());
             dispatch(clearCart());
+
+            // Navigate to home page and show success toast
             navigate("/")
             toast.success("Purchase successful 🙌")
-
         }
     };
 
     return (
         <div className="relative h-[100vh] w-full">
+            {/* Overlay */}
             <div className="absolute top-0 left-0 h-full w-full bg-black opacity-50 backdrop-blur"></div>
             <div className="absolute top-24 left-1/2 z-10 w-[500px] py-10 px-8 h-fit text-black text-center bg-white rounded-[30px] transform -translate-x-1/2">
                 <div className="text-2xl font-medium">
                     <h1>Order Form</h1>
+                    {/* Close button */}
                     <button
                         onClick={handleClose}
                         className="absolute top-5 right-5 hover:scale-[108%]"
@@ -73,6 +84,7 @@ function OrderForm() {
                     </button>
                 </div>
 
+                {/* Order form */}
                 <form onSubmit={handleSubmit} className="my-8">
                     <div className="flex gap-4">
                         <InputField

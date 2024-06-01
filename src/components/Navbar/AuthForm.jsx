@@ -10,6 +10,11 @@ import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { validateEmail, validatePassword, validateConfirmPassword } from '../../helpers/validation';
 
+
+// Form component for user authentication (sign in and sign up).
+// mode - The mode of the form: 'signin' or 'signup'.
+// toggleMode - Function to toggle between sign in and sign up modes.
+// handleClose - Function to handle the form closing.
 const AuthForm = ({ mode, toggleMode, handleClose }) => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
@@ -22,6 +27,8 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
     const toggleShowPassword = () => setShowPassword(!showPassword);
     const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
+
+    //   Function to log in a user with email and password.
     const loginAccount = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -43,11 +50,12 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
         }
     };
 
+
+    //  Function to create a new user account with email and password.
     const createAccount = async () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             await loginAccount();
-            // toast.success('Account created successfully.');
         } catch (error) {
             console.error('Error during account creation:', error);
             if (error.customData && error.customData._tokenResponse && error.customData._tokenResponse.error && error.customData._tokenResponse.error.code === 400) {
@@ -58,6 +66,8 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
         }
     };
 
+    // Function to handle form submission.
+    // Validates form inputs and performs sign in or sign up actions accordingly.
     const handleSubmit = (e) => {
         e.preventDefault();
         const emailError = validateEmail(email);

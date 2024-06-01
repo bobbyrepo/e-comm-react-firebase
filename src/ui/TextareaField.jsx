@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Component for form textarea field
 const TextareaField = ({ id, label, type, value, onChange, onBlur, error }) => (
     <div className="flex flex-col gap-1 items-start w-full mx-auto">
         <label htmlFor={id} className="text-lg">{label}</label>

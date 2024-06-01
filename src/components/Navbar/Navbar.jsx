@@ -27,10 +27,12 @@ function Navbar() {
     const [search, setSearch] = useState("")
     const [searchList, setSearchList] = useState([])
 
+    // Handle search input change
     const handleInputChange = (e) => {
         setSearch(e.target.value)
     }
 
+    // Filter products based on the search input
     const searchFunction = async () => {
         try {
             const filteredProducts = allProducts.filter(product =>
@@ -42,6 +44,7 @@ function Navbar() {
         }
     }
 
+    // Handle user logout
     const handleLogout = async () => {
         await signOut(auth);
         dispatch(deleteAuth({
@@ -52,6 +55,7 @@ function Navbar() {
         });
     }
 
+    // Update search results when the search input changes
     useEffect(() => {
         if (search.length > 0) setShowSearch(true)
         else setShowSearch(false)
@@ -68,6 +72,7 @@ function Navbar() {
         <div className='fixed top-0 z-[100] w-full  bg-zinc-800  h-[70px] text-white'>
             <div className='flex flex-col item justify-between w-[80%] mx-auto h-full'>
                 <div className="flex my-auto justify-between">
+                    {/* Logo navigation */}
                     <button
                         onClick={() => navigate("/")}
                         className="flex flex-col justify-center">
@@ -76,17 +81,19 @@ function Navbar() {
                     </button>
                     <div className="flex gap-4">
                         <div className="relative">
+                            {/* Search field and results */}
                             <SeachField search={search} handleInputChange={handleInputChange} setShowSearch={setShowSearch} />
                             {showSearch && <SearchCardsList searchList={searchList} setSearch={setSearch} />}
                         </div>
                         {isAuthenticated ?
                             <div className="flex gap-4 items-center">
+                                {/* Order history button */}
                                 <button
                                     onClick={() => navigate("/order-history")}
                                     className='relative text-2xl hover:scale-[105%] h-5 text-neutral-200'>
                                     <RiReceiptLine />
-
                                 </button>
+                                {/* Cart button with item count */}
                                 <button
                                     onClick={() => navigate("/cart")}
                                     className='relative text-2xl hover:scale-[105%]'>
@@ -95,13 +102,13 @@ function Navbar() {
                                         {cartItems.length}
                                     </h3>
                                 </button>
+                                {/* User avatar dropdown menu */}
                                 <div className="dropdown-center text-[26px] h-8 hover:scale-[105%]">
                                     <button className="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <RxAvatar />
                                     </button>
                                     <u className="dropdown-menu no-underline py-0 overflow-hidden">
-                                        <div
-                                            className="w-full px-2 py-2">{user.email.split('@')[0]}</div>
+                                        <div className="w-full px-2 py-2">{user.email.split('@')[0]}</div>
                                         <div
                                             onClick={() => handleLogout()}
                                             className="w-full px-2 py-2 hover:text-white hover:bg-neutral-600">Logout</div>
@@ -109,6 +116,7 @@ function Navbar() {
                                 </div>
                             </div>
                             :
+                            // Sign In/Up button for unauthenticated users
                             <button
                                 className='hover:scale-[103%]'
                                 onClick={() => dispatch(toggleSignIn())}

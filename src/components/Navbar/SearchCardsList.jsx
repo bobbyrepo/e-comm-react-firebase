@@ -1,6 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+
+// Component to display a list of search results.
+// searchList - List of items matching the search query.
+// setSearch - Function to update the search query.
 function SearchCardsList({ searchList, setSearch }) {
     return (
         <div
@@ -18,8 +22,8 @@ function SearchCardsList({ searchList, setSearch }) {
                                     <img src={item.image} className='w-[70px] aspect-[5/6] rounded object-cover' alt="" />
                                     <div className="flex flex-col">
                                         <h1 className='line-clamp-1'>{item.title}</h1>
-                                        <h1 >{item.category}</h1>
-                                        <h1 >Rating : {item.rating.rate}</h1>
+                                        <h1>{item.category}</h1>
+                                        <h1>Rating : {item.rating.rate}</h1>
                                     </div>
                                 </div>
                             </Link>
@@ -28,7 +32,8 @@ function SearchCardsList({ searchList, setSearch }) {
                     )
                 }
             </div>
-        </div>)
+        </div>
+    )
 }
 
 export default SearchCardsList

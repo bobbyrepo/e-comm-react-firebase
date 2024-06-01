@@ -1,14 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Define order form slice
 const orderFormSlice = createSlice({
   name: "orderForm",
   initialState: {
     showForm: false,
   },
   reducers: {
+    // Show order form
     showOrderForm(state) {
       state.showForm = true;
     },
+    // Hide order form
     hideOrderForm(state) {
       state.showForm = false;
     },

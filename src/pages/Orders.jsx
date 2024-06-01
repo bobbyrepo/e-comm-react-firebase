@@ -7,8 +7,10 @@ import ShippedToDetails from '../components/Order/ShippedToDetails';
 import OrderSummary from '../components/Order/OrderSummary';
 
 function Orders() {
+    // Select orders from the Redux store
     const { orders } = useSelector(selectOrders);
 
+    // If there are no orders, display a message indicating no purchases have been made
     if (orders.length === 0) {
         return <ProductsNotFound text="You have not made any purchase yet" />;
     }
@@ -17,6 +19,7 @@ function Orders() {
         <div className='py-10'>
             <h1 className='text-3xl font-semibold'>Order History</h1>
             <div className="flex flex-col gap-3 mt-8">
+                {/* Map through the orders and render details for each order */}
                 {orders.map((order, ind) => (
                     <div key={ind} className="row py-2 px-4 border border-neutral-500 rounded-2xl h-full">
                         <ProductTable products={order.products} />

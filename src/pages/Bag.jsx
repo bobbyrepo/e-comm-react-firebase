@@ -1,17 +1,16 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { cart } from '../utils/redux/slice/cartSlice'
 import BagContent from '../components/Bag/BagContent'
 import BagAmount from '../components/Bag/BagAmount'
 import ProductsNotFound from '../ui/ProductsNotFound'
 
 function Bag() {
-    const dispatch = useDispatch()
+    // Get cart items from the Redux store
     const { cartItems } = useSelector(cart)
 
-    console.log(cartItems)
-
-    if (cartItems.length == 0) {
+    // If the cart is empty, display a message indicating so
+    if (cartItems.length === 0) {
         return <ProductsNotFound text="Your bag is empty! Let’s fill it up shall we?" />
     }
 

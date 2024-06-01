@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdClose } from 'react-icons/md';
 
+// Component for the header of a form.
 const FormHeader = ({ title, subtitle, handleClose }) => (
     <div className="text-3xl font-medium">
         <h1 className="text-2xl text-black">{title}</h1>

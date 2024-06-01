@@ -13,6 +13,10 @@ function ProductDetails() {
     const dispatch = useDispatch()
     const [product, setProduct] = useState(null)
 
+    // Function to add item to the cart
+    // Check if the user is authenticated
+    // If not authenticated, display error toast and return
+    // If yes, Dispatch action to add item to cart,display success toast
     const addToCart = (product) => {
         if (!isAuthenticated) {
             toast.error("You must login first");
@@ -27,25 +31,32 @@ function ProductDetails() {
     }
 
 
+    // Function to fetch product details
     const fetchProductDetails = async (id) => {
         try {
+            // Fetch product details from the API
             const response = await baseApi(`/products/${id}`)
             const product = response.data
+            // Fetch conversion rate from USD to INR
             const conversionResponse = await axios.get(`https://api.frankfurter.app/latest?amount=1&from=usd&to=inr`)
             const unit = conversionResponse.data.rates.INR
+            // Update product price with the converted price in INR
             const updatedProducts = {
                 ...product, price: Math.round(unit * product.price)
             }
+            // Set the updated product state
             setProduct(updatedProducts)
         }
         catch { err => console.log("fetching product details error", err) }
     }
 
+    // Fetch product details when the component mounts or when the id parameter changes
     useEffect(() => {
         fetchProductDetails(id)
     }, [id])
 
 
+    // Render loading message if product details are not yet fetched
     if (product == null) return <h1 className='text-xl font-medium text-center'>loading   . . .</h1>
 
     return (
@@ -60,6 +71,7 @@ function ProductDetails() {
                     <hr className='mt-10 ' />
                     <div className=" mt-4 flex justify-between items-center">
                         <h1 className='text-2xl'>{product.price}.00 <span className='text-rose-500'>rs</span></h1>
+                        {/* Button to add item to cart */}
                         <button
                             onClick={() => addToCart(product)}
                             className='px-4 text-lg h-12 text-white font-semibold rounded-full bg-rose-500'>Add To Cart</button>

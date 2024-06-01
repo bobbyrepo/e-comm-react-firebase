@@ -10,21 +10,24 @@ function Filter() {
     const dispatch = useDispatch()
     const { allCategories, selectedCategory } = useSelector(categories)
 
-    const getcategories = async () => {
+    // Function to fetch categories from the API
+    const getCategories = async () => {
         try {
             const categories = await baseApi.get("/products/categories")
             dispatch(addCategory(categories.data))
-        } catch {
-            err => console.log("fetch categories error", err)
+        } catch (err) {
+            console.log("fetch categories error", err)
         }
     }
 
+    // Handle category selection
     const handleSelect = (index) => {
         dispatch(selectCategory(selectedCategory == allCategories[index] ? null : allCategories[index]))
     }
 
+    // Fetch categories on component mount
     useEffect(() => {
-        getcategories()
+        getCategories()
     }, [])
 
     return (

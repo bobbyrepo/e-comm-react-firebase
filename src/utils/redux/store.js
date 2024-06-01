@@ -7,15 +7,16 @@ import modalSlice from "./slice/modalSlice";
 import orderFormSlice from "./slice/orderFormSlice";
 import orderSlice from "./slice/orderSlice";
 
+// Configure Redux store
 const store = configureStore({
   reducer: {
-    auth: authSlice,
-    modal: modalSlice,
-    categories: categoriesSlice,
-    cart: cartSlice,
-    products: productsSlice,
-    order: orderSlice,
-    orderForm: orderFormSlice,
+    auth: authSlice, // Authentication slice
+    modal: modalSlice, // Modal slice
+    categories: categoriesSlice, // Categories slice
+    cart: cartSlice, // Cart slice
+    products: productsSlice, // Products slice
+    order: orderSlice, // Order slice
+    orderForm: orderFormSlice, // Order form slice
   },
 });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { VscEye, VscEyeClosed } from 'react-icons/vsc';
 
+// Component for form password input
 const PasswordInput = ({ id, label, value, onChange, onBlur, showPassword, toggleShowPassword, error }) => (
     <div className="flex flex-col gap-1 items-start w-[320px] mx-auto">
         <label htmlFor={id} className="text-lg">{label}</label>

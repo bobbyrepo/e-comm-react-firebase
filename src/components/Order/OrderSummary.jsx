@@ -4,6 +4,7 @@ const OrderSummary = ({ order }) => {
 
     return (
         <div className="col p-2 bg-white">
+            {/* Table to display order summary */}
             <table className="min-w-full bg-white">
                 <tbody>
                     <tr>
