@@ -7,8 +7,8 @@ function ProductListSkeleton() {
             {
 
                 [...Array(10)]
-                    .map((ind) =>
-                        <div className='mb-3 placeholder-glow'>
+                    .map((item, ind) =>
+                        <div key={ind} className='mb-3 placeholder-glow'>
                             <div className='w-full py-2 px-3 outline rounded outline-stone-100 h-full hover:scale-[101%] duration-150'>
                                 {/* Link to the product details page */}
                                 <div className='mx-auto h-[200px] w-full object-contain placeholder ' ></div >
