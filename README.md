@@ -1,4 +1,5 @@
 ## Links
+
 - **Deployment URL:** [https://stopshop-kxdb.onrender.com](https://stopshop-kxdb.onrender.com)
 
 # Stop Shop
@@ -21,16 +22,34 @@ Stop Shop is an e-commerce web application designed to provide users with a seam
 - **Axios:** HTTP client for making API requests.
 - **Tailwind CSS:** Utility-first CSS framework for styling.
 
-  
 ## Installation
 
-1. Clone the repository:`git clone https://github.com/bobbyrepo/e-comm-react-firebase`
-2.  Navigate to the project directory:`cd e-comm-react-firebase`
-3.  Install dependencies: `npm install`
-4. Create a `.env` file in the root directory and add the following environment variables mentioned in the .env.example
-5. Start the development server:`npm run dev`
-6. Open your web browser
+1. Clone the repository:
 
+```bash
+git clone https://github.com/bobbyrepo/e-comm-react-firebase
+```
+
+2.  Navigate to the project directory:
+
+```bash
+cd e-comm-react-firebase
+```
+
+3.  Install dependencies:
+
+```bash
+npm install
+```
+
+4. Create a `.env` file in the root directory and add the following environment variables mentioned in the .env.example
+5. Start the development server:
+
+```bash
+npm run dev`
+```
+
+6. Open your web browser
 
 ## Development Process
 
@@ -47,11 +66,13 @@ The development of Stop Shop involved the following key steps:
 ## Challenges Faced and Solutions Implemented
 
 ### Challenge: Managing State
+
 Solution: Redux was used for state management, allowing for centralized and predictable state management across components.
 
 ### Challenge: Integrating with Firebase
+
 Solution: Firebase SDK was integrated into the application to handle user authentication and data storage, providing a reliable backend infrastructure.
 
 ### Challenge: Styling Consistency
-Solution: Tailwind CSS utility classes were used for styling to ensure consistency and maintainability across the application.
 
+Solution: Tailwind CSS utility classes were used for styling to ensure consistency and maintainability across the application.
