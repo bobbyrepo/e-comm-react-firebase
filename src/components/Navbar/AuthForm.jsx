@@ -62,7 +62,7 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
     //  Function to create a new user account with email and password.
     const createAccount = async () => {
         try {
-            const register = await baseApi.post("api/user/register", { email, password })
+            const register = await baseApi.post("/api/user/register", { email, password })
             if (register.status == 201) {
                 await loginAccount();
             }
