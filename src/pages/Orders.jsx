@@ -1,6 +1,6 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectOrders } from '../utils/redux/slice/orderSlice';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders, selectOrders } from '../utils/redux/slice/orderSlice';
 import ProductsNotFound from '../ui/ProductsNotFound';
 import ProductTable from '../components/Order/ProductTable ';
 import ShippedToDetails from '../components/Order/ShippedToDetails';
@@ -8,7 +8,14 @@ import OrderSummary from '../components/Order/OrderSummary';
 
 function Orders() {
     // Select orders from the Redux store
+    const dispatch = useDispatch();
     const { orders } = useSelector(selectOrders);
+
+    console.log(orders)
+    useEffect(() => {
+        dispatch(fetchOrders());
+    }, [dispatch]);
+
 
     // If there are no orders, display a message indicating no purchases have been made
     if (orders.length === 0) {
@@ -23,7 +30,7 @@ function Orders() {
                 {orders.map((order, ind) => (
                     <div key={ind} className="row py-2 px-4 border border-neutral-500 rounded-2xl h-full">
                         <ProductTable products={order.products} />
-                        <ShippedToDetails shippedTo={order.shippedTo} orderedBy={order.orderedBy} />
+                        <ShippedToDetails shippedTo={order.shippedTo} />
                         <OrderSummary order={order} />
                     </div>
                 ))}

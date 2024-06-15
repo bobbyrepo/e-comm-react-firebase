@@ -1,16 +1,17 @@
 import React from 'react'
-import { addItem } from '../../utils/redux/slice/cartSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { addProductToCart } from '../../utils/redux/slice/cartSlice'
 import { Link } from 'react-router-dom'
 import { authData } from '../../utils/redux/slice/authSlice'
 import { toast } from 'react-hot-toast'
+import { baseApi } from '../../api/axiosInstance'
 
 function ProductCard({ item }) {
     const dispatch = useDispatch()
     const { isAuthenticated } = useSelector(authData)
 
     // Function to add item to the cart
-    const addToCart = (item) => {
+    const addToCart = async (item) => {
         // Check if the user is authenticated
         if (!isAuthenticated) {
             // If not authenticated, display error toast and return
@@ -18,8 +19,7 @@ function ProductCard({ item }) {
             return
         }
         try {
-            // Dispatch action to add item to cart
-            dispatch(addItem(item))
+            dispatch(addProductToCart(item._id))
             // Display success toast after adding item to cart
             toast.success("Added to Cart");
         } catch (error) {
@@ -32,13 +32,13 @@ function ProductCard({ item }) {
         <div className='mb-3'>
             <div className='w-full py-2 px-3 outline rounded outline-stone-100 h-full hover:scale-[101%] duration-150'>
                 {/* Link to the product details page */}
-                <Link to={`/product/${item.id}`}>
+                <Link to={`/product/${item._id}`}>
                     <img src={item.image} className='mx-auto h-[200px] object-contain' alt="" />
                     <div className="mt-4 grid gap-1 text-neutral-800">
                         <h1 className='font-semibold line-clamp-1'>{item.title} </h1>
                         <h2 className='line-clamp-2 text-neutral-600'>{item.description} </h2>
                         <h2 className='text-neutral-600'>rating : {item.rating.rate} </h2>
-                        <h2 className='font-semibold'> {item.price}.00<span className='font-normal' > rs</span></h2>
+                        <h2 className='font-semibold'> {item.price} $<span className='font-normal' ></span></h2>
                     </div>
                 </Link>
                 {/* Button to add item to cart */}

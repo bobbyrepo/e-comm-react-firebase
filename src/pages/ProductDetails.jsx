@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { baseApi } from '../api/axiosInstance';
 import axios from 'axios';
-import { addItem } from '../utils/redux/slice/cartSlice';
 import { authData } from '../utils/redux/slice/authSlice';
 import { toast } from 'react-hot-toast';
+import { addProductToCart } from '../utils/redux/slice/cartSlice';
 
 function ProductDetails() {
     const { isAuthenticated } = useSelector(authData)
@@ -23,7 +23,7 @@ function ProductDetails() {
             return
         }
         try {
-            dispatch(addItem(product))
+            dispatch(addProductToCart(id))
             toast.success("Added to Cart");
         } catch (error) {
             toast.error(error.message);
@@ -31,21 +31,15 @@ function ProductDetails() {
     }
 
 
+
     // Function to fetch product details
     const fetchProductDetails = async (id) => {
         try {
             // Fetch product details from the API
-            const response = await baseApi(`/products/${id}`)
+            const response = await baseApi(`/api/product/${id}`)
             const product = response.data
-            // Fetch conversion rate from USD to INR
-            const conversionResponse = await axios.get(`https://api.frankfurter.app/latest?amount=1&from=usd&to=inr`)
-            const unit = conversionResponse.data.rates.INR
-            // Update product price with the converted price in INR
-            const updatedProducts = {
-                ...product, price: Math.round(unit * product.price)
-            }
-            // Set the updated product state
-            setProduct(updatedProducts)
+            // Set the product state
+            setProduct(product)
         }
         catch { err => console.log("fetching product details error", err) }
     }
@@ -70,7 +64,7 @@ function ProductDetails() {
                     <h1 className='mt-2 text-lg'>Rating : {product.rating.rate}</h1>
                     <hr className='mt-10 ' />
                     <div className=" mt-4 flex justify-between items-center">
-                        <h1 className='text-2xl'>{product.price}.00 <span className='text-rose-500'>rs</span></h1>
+                        <h1 className='text-2xl'>{product.price} <span className='text-rose-500'>$</span></h1>
                         {/* Button to add item to cart */}
                         <button
                             onClick={() => addToCart(product)}

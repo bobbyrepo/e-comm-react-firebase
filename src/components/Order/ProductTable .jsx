@@ -14,10 +14,10 @@ const ProductTable = ({ products }) => {
                 </thead>
                 <tbody>
                     {/* Map through products to render each product */}
-                    {products.map((product, ind) => (
+                    {products?.map((product, ind) => (
                         <tr key={ind}>
-                            <td className="line-clamp-1">{product.title}</td>
-                            <td className="text-right">x{product.quantity}</td>
+                            <td className="line-clamp-1">{product?.product?.title}</td>
+                            <td className="text-right">x{product?.quantity}</td>
                         </tr>
                     ))}
                 </tbody>

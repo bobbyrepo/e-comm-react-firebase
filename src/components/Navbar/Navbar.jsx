@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
-import { cart } from '../../utils/redux/slice/cartSlice';
 import { products } from '../../utils/redux/slice/productsSlice';
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { RxAvatar } from "react-icons/rx";
@@ -15,12 +14,13 @@ import { useDispatch } from 'react-redux';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../config.js/firebase';
 import { toast } from 'react-hot-toast';
+import Cookies from 'js-cookie';
 
 function Navbar() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { allProducts } = useSelector((products))
-    const { cartItems } = useSelector(cart)
+    const cartItems = useSelector((state) => state.cart.cartItems);
     const { isAuthenticated, user } = useSelector(authData)
 
     const [showSearch, setShowSearch] = useState(false)
@@ -46,7 +46,8 @@ function Navbar() {
 
     // Handle user logout
     const handleLogout = async () => {
-        await signOut(auth);
+        // Clear the access token cookie
+        Cookies.remove('accessToken', { path: '/' });
         dispatch(deleteAuth({
             user: null
         }))
@@ -99,7 +100,7 @@ function Navbar() {
                                     className='relative text-2xl hover:scale-[105%]'>
                                     <HiOutlineShoppingBag />
                                     <h3 className='absolute top-0 -right-2 text-sm px-[6px] rounded-full bg-red-600'>
-                                        {cartItems.length}
+                                        {cartItems?.length}
                                     </h3>
                                 </button>
                                 {/* User avatar dropdown menu */}

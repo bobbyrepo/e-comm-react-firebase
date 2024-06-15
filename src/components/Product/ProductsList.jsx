@@ -16,18 +16,11 @@ function ProductsList() {
     const fetchProducts = async () => {
         try {
             // Fetch products from the backend API
-            const response = await baseApi("/products")
+            const response = await baseApi("/api/product/all")
             const products = response.data
 
-            // Fetch currency conversion rates
-            const conversionResponse = await axios.get(`https://api.frankfurter.app/latest?amount=1&from=usd&to=inr`)
-            const unit = conversionResponse.data.rates.INR
-
-            // Convert product prices to INR
-            const updatedProducts = products.map(item => ({ ...item, price: Math.round(unit * item.price) }))
-
             // Dispatch action to add products to the Redux store
-            dispatch(addProduct(updatedProducts))
+            dispatch(addProduct(products))
         }
         catch (err) {
             console.log("error in fetching products", err)

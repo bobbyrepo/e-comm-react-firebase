@@ -1,79 +1,89 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { baseApi } from "../../../api/axiosInstance";
 
-// Retrieve cart items and total from local storage
-const storedCartItems = localStorage.getItem("cartItems");
-const storedCartTotal = localStorage.getItem("cartTotal");
+// Thunks for async actions
+export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
+  const response = await baseApi.get("/api/cart/getcart");
+  return response.data;
+});
+
+export const addProductToCart = createAsyncThunk(
+  "cart/addProductToCart",
+  async (productId) => {
+    const response = await baseApi.put("/api/cart/add", { productId });
+    return response.data;
+  }
+);
+
+export const incrementProductInCart = createAsyncThunk(
+  "cart/incrementProductInCart",
+  async (productId) => {
+    const response = await baseApi.put("/api/cart/increment", { productId });
+    return response.data;
+  }
+);
+
+export const decrementProductInCart = createAsyncThunk(
+  "cart/decrementProductInCart",
+  async (productId) => {
+    const response = await baseApi.put("/api/cart/decrement", { productId });
+    return response.data;
+  }
+);
+
+export const removeProductFromCart = createAsyncThunk(
+  "cart/removeProductFromCart",
+  async (productId) => {
+    const response = await baseApi.put("/api/cart/remove", { productId });
+    return response.data;
+  }
+);
 
 // Define cart slice
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cartItems: storedCartItems ? JSON.parse(storedCartItems) : [],
-    cartTotal: storedCartTotal ? JSON.parse(storedCartTotal) : 0,
+    cartItems: [],
+    cartTotal: 0,
+    status: "idle",
+    error: null,
   },
   reducers: {
-    addItem: (state, action) => {
-      const newItem = action.payload;
-      const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
-      );
-      if (existingItem) {
-        if (existingItem.quantity < 5) {
-          existingItem.quantity += 1;
-          state.cartTotal += existingItem.price;
-        }
-      } else {
-        state.cartItems.push({ ...newItem, quantity: 1 });
-        state.cartTotal += newItem.price;
-      }
-      // Update local storage with updated cart items
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
-    },
-
-    incrementItem: (state, action) => {
-      const existingItem = state.cartItems.find(
-        (item) => item.id === action.payload
-      );
-      if (existingItem && existingItem.quantity < 5) {
-        existingItem.quantity += 1;
-        state.cartTotal += existingItem.price;
-      }
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
-    },
-
-    decrementItem: (state, action) => {
-      const existingItem = state.cartItems.find(
-        (item) => item.id === action.payload
-      );
-      if (existingItem && existingItem.quantity > 1) {
-        existingItem.quantity -= 1;
-        state.cartTotal -= existingItem.price;
-      }
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
-    },
-
-    removeItem: (state, action) => {
-      const itemToRemove = state.cartItems.find(
-        (item) => item.id === action.payload
-      );
-      const itemTotal = itemToRemove.price * itemToRemove.quantity;
-      state.cartTotal -= itemTotal;
-      state.cartItems = state.cartItems.filter(
-        (item) => item.id !== action.payload
-      );
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
-    },
-
     clearCart: (state) => {
       state.cartItems = [];
       state.cartTotal = 0;
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      localStorage.setItem("cartTotal", JSON.stringify(state.cartTotal));
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cartItems = action.payload.products;
+        state.cartTotal = action.payload.cartPrice;
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(addProductToCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload.cart.products;
+        state.cartTotal = action.payload.cart.cartPrice;
+      })
+      .addCase(incrementProductInCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload.cart.products;
+        state.cartTotal = action.payload.cart.cartPrice;
+      })
+      .addCase(decrementProductInCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload.cart.products;
+        state.cartTotal = action.payload.cart.cartPrice;
+      })
+      .addCase(removeProductFromCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload.cart.products;
+        state.cartTotal = action.payload.cart.cartPrice;
+      });
   },
 });
 
@@ -81,8 +91,7 @@ const cartSlice = createSlice({
 export const cart = (state) => state.cart;
 
 // Actions
-export const { addItem, incrementItem, decrementItem, removeItem, clearCart } =
-  cartSlice.actions;
+export const { clearCart } = cartSlice.actions;
 
 // Reducer
 export default cartSlice.reducer;

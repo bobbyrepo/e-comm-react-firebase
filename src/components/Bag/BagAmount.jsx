@@ -9,10 +9,10 @@ import { processingFee, discount } from '../../utils/constants';
 
 function BagAmount() {
     const dispatch = useDispatch()
-    const { cartTotal } = useSelector(cart)
+    const cartTotal = useSelector(state => state.cart.cartTotal).toFixed(2)
 
     // Calculate payable amount by adding cart total, processing fee, and subtracting discount
-    const payableAmmount = cartTotal + processingFee - discount
+    const payableAmmount = (parseFloat(cartTotal) + parseFloat(processingFee) - parseFloat(discount)).toFixed(2);
 
     // Function to handle checkout
     const handleCheckout = () => {
@@ -29,7 +29,7 @@ function BagAmount() {
                 <div className="flex justify-between">
                     <div className="flex flex-col">
                         <h1 className='font-medium text-2xl'>Total</h1>
-                        <h1 className='text-xl'>{payableAmmount}.00 rs</h1>
+                        <h1 className='text-xl'>{payableAmmount} $</h1>
                     </div>
                     <button
                         onClick={handleCheckout}

@@ -14,8 +14,8 @@ function Filter() {
     // Function to fetch categories from the API
     const getCategories = async () => {
         try {
-            const categories = await baseApi.get("/products/categories")
-            dispatch(addCategory(categories.data))
+            const categories = await baseApi.get("api/category/all")
+            dispatch(addCategory(categories.data.category))
         } catch (err) {
             console.log("fetch categories error", err)
         }

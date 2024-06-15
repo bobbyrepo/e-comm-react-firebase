@@ -9,19 +9,19 @@ const OrderSummary = ({ order }) => {
                 <tbody>
                     <tr>
                         <td className="font-semibold">Bag total:</td>
-                        <td className='text-right'>{order.cartTotal}.00 rs</td>
+                        <td className='text-right'>{order?.cartPrice} $</td>
                     </tr>
                     <tr>
                         <td className="font-semibold">Processing Fee:</td>
-                        <td className='text-right'>{order.processingFee}.00 rs</td>
+                        <td className='text-right'>{order?.processingFee} $</td>
                     </tr>
                     <tr>
                         <td className="font-semibold">Discount:</td>
-                        <td className='text-right'>-{order.discount}.00 rs</td>
+                        <td className='text-right'>-{order?.discount} $</td>
                     </tr>
                     <tr>
                         <td className="font-semibold">Total Price:</td>
-                        <td className='text-right'>{order.payableAmmount}.00 rs</td>
+                        <td className='text-right'>{order?.orderPrice} $</td>
                     </tr>
                 </tbody>
             </table>

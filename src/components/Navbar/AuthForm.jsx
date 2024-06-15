@@ -9,6 +9,8 @@ import { hideModals } from '../../utils/redux/slice/modalSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { validateEmail, validatePassword, validateConfirmPassword } from '../../helpers/validation';
+import { baseApi } from '../../api/axiosInstance';
+import Cookies from 'js-cookie';
 
 
 // Form component for user authentication (sign in and sign up).
@@ -31,12 +33,18 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
     //   Function to log in a user with email and password.
     const loginAccount = async () => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+            const userCredential = await baseApi.post("/api/user/login", { email, password })
+            const user = userCredential.data;
+            console.log(user.token)
+            Cookies.remove('accessToken', { path: '/' });
+            Cookies.set("accessToken", user.token, { expires: 7, path: "/", secure: true })
+            console.log(
+                Cookies.get("accessToken")
+            )
             dispatch(addAuth({
                 user: {
                     email: user.email,
-                    accessToken: user.accessToken,
+                    accessToken: user.token,
                     uid: user.uid,
                 },
             }));
@@ -45,7 +53,7 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
             });
             dispatch(hideModals());
         } catch (error) {
-            console.error('Error during login:', error);
+            // console.error('Error during login:', error);
             toast.error("Invalid Credentials");
         }
     };
@@ -54,11 +62,13 @@ const AuthForm = ({ mode, toggleMode, handleClose }) => {
     //  Function to create a new user account with email and password.
     const createAccount = async () => {
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            await loginAccount();
+            const register = await baseApi.post("api/user/register", { email, password })
+            if (register.status == 201) {
+                await loginAccount();
+            }
         } catch (error) {
-            console.error('Error during account creation:', error);
-            if (error.customData && error.customData._tokenResponse && error.customData._tokenResponse.error && error.customData._tokenResponse.error.code === 400) {
+            // console.error('Error during account creation:', error);
+            if (error.response && error.response.status === 400) {
                 toast.error("Email Already Exists");
             } else {
                 toast.error("Account Creation Error");

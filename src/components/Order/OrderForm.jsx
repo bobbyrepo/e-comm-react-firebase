@@ -5,19 +5,18 @@ import TextareaField from '../../ui/TextareaField';
 import { validateFirstName, validateLastName, validateAddress, validateContact, validatePostal } from '../../helpers/validation';
 import { MdClose } from 'react-icons/md';
 import { processingFee, discount } from '../../utils/constants';
-import { cart } from '../../utils/redux/slice/cartSlice';
 import { clearCart } from '../../utils/redux/slice/cartSlice';
 import { hideOrderForm } from '../../utils/redux/slice/orderFormSlice';
-import { addOrder } from '../../utils/redux/slice/orderSlice';
-import { authData } from '../../utils/redux/slice/authSlice';
+import { addOrderToServer } from '../../utils/redux/slice/orderSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 function OrderForm() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    const { cartTotal, cartItems } = useSelector(cart)
-    const { user } = useSelector(authData)
+    const cart = useSelector(state => state.cart)
+
+    console.log(cart)
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -50,13 +49,12 @@ function OrderForm() {
             setErrors({ firstName: '', lastName: '', address: '', contact: '', postal: '' });
 
             // Dispatch actions to add the order, hide the order form, and clear the cart
-            dispatch(addOrder({
-                orderedBy: user.email,
-                products: cartItems,
-                cartTotal,
+            dispatch(addOrderToServer({
+                // products: cart.cartItems,
+                // orderPrice: cart.cartTotal,
                 processingFee,
                 discount,
-                payableAmmount: cartTotal + processingFee - discount,
+                payableAmount: (parseFloat(cart.cartTotal) + parseFloat(processingFee) - parseFloat(discount)).toFixed(2),
                 shippedTo: { firstName, lastName, address, contact, postal }
             }))
             dispatch(hideOrderForm());
